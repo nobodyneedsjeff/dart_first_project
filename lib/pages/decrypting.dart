@@ -42,7 +42,6 @@ class _DecryptingState extends State<Decrypting> {
                       ),
                     ],
                   ),
-
                   Row(
                     children: <Widget>[
                       Flexible(
@@ -87,7 +86,6 @@ class _DecryptingState extends State<Decrypting> {
                               filled: true,
                               border: OutlineInputBorder(),
                               labelText: "Секретная фраза"),
-                          //style: Theme.of(context).textTheme.body1,
                         ),
                       ),
                     ],
@@ -592,7 +590,7 @@ class _DecryptingState extends State<Decrypting> {
                                 if (text.remove("$c")){
                                   text.insert(i,'я'); }
                               }}else if(b+33>33){ // else if it is more than 33 it will minus it and will be new number
-                              var c = (b+33)-33;
+                              var c = b;
                               if (text[i] == '$c') {
                                 if (text.remove("$c")){
 
@@ -610,9 +608,12 @@ class _DecryptingState extends State<Decrypting> {
                     ],
                   ),
                   Row(
-                    children: [
-                      Padding(padding: EdgeInsets.only(top:25.0, bottom:15.0),
-                          child: Text('$result')
+                    children: <Widget> [
+                      Flexible(
+                          child: Padding(padding: EdgeInsets.only(top:25.0, bottom:15.0),
+                          child: Text('$result'//,maxLines: null, overflow:TextOverflow.ellipsis
+                          )
+                      )
                       )
                     ],
                   )
@@ -620,10 +621,8 @@ class _DecryptingState extends State<Decrypting> {
               );
             }),
         floatingActionButton: FloatingActionButton(
-
         backgroundColor: Colors.indigo,
         onPressed: (){
-
           Navigator.pushNamed(context,'/encrypting');
         },
         child:  Icon(

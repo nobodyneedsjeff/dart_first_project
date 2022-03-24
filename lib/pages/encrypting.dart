@@ -90,10 +90,8 @@ class _EncryptingState extends State<Encrypting> {
                 decoration: const InputDecoration(
                     fillColor: Colors.white54 ,
                     filled: true,
-                  //  focusColor: Colors.white,
                     border: OutlineInputBorder(),
                     labelText: "Секретная фраза"),
-                //style: Theme.of(context).textTheme.body1,
               ),
             ),
           ],
@@ -104,19 +102,26 @@ class _EncryptingState extends State<Encrypting> {
             child: ElevatedButton(onPressed: (){
               setState(() {
                 var text=key.toLowerCase().replaceAll(" ",'!').split('');
-                for (int i = 0; i < text.length; i++) {
-                  var a = i/20; //assign amount of symbols to insert next line between
-                  // var offset="я тебя любил";// place text to define offset off alphabet
-
-                  List offsetlist = secretPhrase.replaceAll(" ", '').split('');
-
-                  var b=offsetlist.length;
-
-                  if (i>0 && a.runtimeType == int){// next line core between
-                    text.insert(i,'\n');
+                List offsetlist = secretPhrase.replaceAll(" ", '').split('');
+                var b=offsetlist.length;
+                int d = 0;
+                var alphabet1=["а","б","в","г","д","е","ё","ж","з","и","й","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+                //2 alphabets
+                for (int i=0; i<text.length; i++){
+                  for(int e = 0; e<alphabet1.length; e++){
+                    var c = b + 1;
+                    d=e+c;//if number is more than 33, go back to the beginning
+                    if (d>33){
+                      d = (e+c)-33 ;
+                    }
+                    if(text[i]==alphabet1[e]){ //replace letters in one list from another
+                      if (text.remove(alphabet1[e])){
+                        text.insert(i,'${d}');}
+                    }
                   }
-                  //assign a number to a letter. shift is defined by secret phrase
-                  else if (text[i] == 'а') {
+                };
+               /* for (int i = 0; i < text.length; i++) {
+                  if (text[i] == 'а') {
                     if (text.remove("а")){
                       var c = b+ 1;
                       if (c>33){
@@ -381,7 +386,7 @@ class _EncryptingState extends State<Encrypting> {
                       text.insert(i,'$c'); }
                   }
 
-                }
+                }*/
                 result = text.toString();
               });
             }, child: Text('Зашифровать!'))
@@ -389,11 +394,14 @@ class _EncryptingState extends State<Encrypting> {
           ],
         ),
         Row(
-          children: [
-            Padding(padding: EdgeInsets.only(top:25.0, bottom:15.0),
-            child: Text('$result'),
-
+          children:<Widget>[
+            Flexible//
+            (child: Padding(padding: EdgeInsets.only(top:25.0, bottom:15.0),
+              child:Text('$result'
+            ),
             )
+
+           )
           ],
         ),
         
