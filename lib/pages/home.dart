@@ -20,6 +20,28 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('Выберите режим'),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(onPressed: (){
+            showDialog(context: context, builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Как пользоваться"),
+                content: Text("В окне \"Зашифровать\" введите текст, который желаете скрыть от других. Вы можете добавить секретную фразу, чтобы его было труднее вскрыть. "
+                 "Нажмите на кнопку \"Зашифровать\" чтобы ваш текст был переведён в код. "
+                "Нажмите на плавующую кнопку чтобы скопировать текст. \n"
+                "Чтобы расшифровать, вставьте полученный текст. Введите секретную фразу, если такая есть, в точности как вам передали. Нажмите на кнопку, и текст расшифруется"),
+                actions:[
+                  ElevatedButton(onPressed: (){
+                    Navigator.of(context).pop();
+                  },
+                      child: Text("Закрыть"))
+                ],
+              );
+
+            }
+            );},
+              icon: Icon(Icons.help)
+          ) // кнопка помощи
+        ],
       ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,

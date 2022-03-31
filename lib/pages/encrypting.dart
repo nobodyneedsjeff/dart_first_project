@@ -11,7 +11,7 @@ class Encrypting extends StatefulWidget {
 }
 
 class _EncryptingState extends State<Encrypting> {
-
+  String dropdownValue = 'Russian';
   String result='';
   late String key;
   String secretPhrase='';
@@ -22,6 +22,28 @@ class _EncryptingState extends State<Encrypting> {
       appBar: AppBar(
         title: Text('Режим шифрования'),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(onPressed: (){
+          showDialog(context: context, builder: (BuildContext context) {
+            return AlertDialog(
+             title: Text("Как пользоваться"),
+             content: const Text("В окне \"Зашифровать\" введите текст, который желаете скрыть от других. Вы можете добавить секретную фразу, чтобы его было труднее вскрыть."
+                 "Нажмите на кнопку \"Зашифровать\" чтобы ваш текст был переведён в код."
+                 " Нажмите на плавующую кнопку чтобы скопировать текст. \n"
+                 "Чтобы расшифровать, вставьте полученный текст. Введите секретную фразу, если такая есть, в точности как вам передали. Нажмите на кнопку, и текст расшифруется"),
+                actions:[
+                  ElevatedButton(onPressed: (){
+                    Navigator.of(context).pop();
+                  },
+                      child: Text("закрыть"))
+                ],
+            );
+
+          }
+            );},
+          icon: Icon(Icons.help)
+          ) // помощь
+        ],
       ),
 
     body: ListView.builder(
@@ -42,9 +64,8 @@ class _EncryptingState extends State<Encrypting> {
               ),
             ),
           ],
-        ),
-
-         Row(
+        ), //слова "ввеидте текст
+        Row(
           children: <Widget>[
              Flexible(
               child:  TextField(
@@ -62,19 +83,19 @@ class _EncryptingState extends State<Encrypting> {
               ),
             ),
           ],
-        ),
+        ), //ввод текста для шифрования
         Row(
           children: const [
             Padding(
               padding: EdgeInsets.all(15.0),
               child: Text('Введите секретную фразу',style:
               TextStyle(
-                fontSize: 20,
+                fontSize: 18,
               ),
               ),
             ),
           ],
-        ),
+        ), // вставка слов для вставления секретной фразы
         Row(
           children: <Widget>[
             Flexible(
@@ -95,9 +116,12 @@ class _EncryptingState extends State<Encrypting> {
               ),
             ),
           ],
-        ),
+        ), //ввод секретной фразы
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+          Column(
+            children: [
             Padding(padding: EdgeInsets.only(top: 25.0),
             child: ElevatedButton(onPressed: (){
               setState(() {
@@ -105,294 +129,63 @@ class _EncryptingState extends State<Encrypting> {
                 List offsetlist = secretPhrase.replaceAll(" ", '').split('');
                 var b=offsetlist.length;
                 int d = 0;
-                var alphabet1=["а","б","в","г","д","е","ё","ж","з","и","й","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+                List alphabet1=["а","б","в","г","д","е","ё","ж","з","и","й","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я"];
+                List alphabet2=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
                 //2 alphabets
+                late List language;
+                if(dropdownValue=="Russian") {
+                  language= alphabet1;
+                }else if (dropdownValue=="English"){
+                  language = alphabet2;
+                }
                 for (int i=0; i<text.length; i++){
-                  for(int e = 0; e<alphabet1.length; e++){
+                  for(int e = 0; e<language.length; e++){
                     var c = b + 1;
-                    d=e+c;//if number is more than 33, go back to the beginning
-                    if (d>33){
-                      d = (e+c)-33 ;
+                    d=e+c;//`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~if number is more than 33, go back to the beginning
+                    if (d>language.length){
+                      d = (e+c)-language.length ;
                     }
-                    if(text[i]==alphabet1[e]){ //replace letters in one list from another
-                      if (text.remove(alphabet1[e])){
+                    if(text[i]==language[e]){ //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~replace letters in one list from another
+                      if (text.remove(language[e])){
                         text.insert(i,'${d}');}
                     }
                   }
                 };
-               /* for (int i = 0; i < text.length; i++) {
-                  if (text[i] == 'а') {
-                    if (text.remove("а")){
-                      var c = b+ 1;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'б') {
-                    if (text.remove("б")){
-                      var c = b+ 2;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'в') {
-                    if (text.remove("в")){
-                      var c = b+ 3;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'г') {
-                    if (text.remove("г")){
-                      var c = b+ 4;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else  if (text[i] == 'д') {
-                    if (text.remove("д")){
-                      var c = b+ 5;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'е') {
-                    if (text.remove("е")){
-                      var c = b+ 6;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ё') {
-                    if (text.remove("ё")){
-                      var c = b+ 7;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ж') {
-                    if (text.remove("ж")){
-                      var c = b+ 8;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'з') {
-                    if (text.remove("з")){
-                      var c = b+ 9;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'и') {
-                    if (text.remove("и")){
-                      var c = b+ 10;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'й') {
-                    if (text.remove("й")){
-                      var c = b+ 11;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'к') {
-                    if (text.remove("к")){
-                      var c = b+ 12;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'л') {
-                    if (text.remove("л")){
-                      var c = b+ 13;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'м') {
-                    if (text.remove("м")){
-                      var c = b+ 14;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'н') {
-                    if (text.remove("н")){
-                      var c = b+ 15;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'о') {
-                    if (text.remove("о")){
-                      var c = b+ 16;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'п') {
-                    if (text.remove("п")){
-                      var c = b+ 17;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'р') {
-                    if (text.remove("р")){
-                      var c = b+ 18;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'с') {
-                    if (text.remove("с")){
-                      var c = b+ 19;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'т') {
-                    if (text.remove("т")){
-                      var c = b+ 20;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'у') {
-                    if (text.remove("у")){
-                      var c = b+ 21;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ф') {
-                    if (text.remove("ф")){
-                      var c = b+ 22;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'х') {
-                    if (text.remove("х")){
-                      var c = b+ 23;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ц') {
-                    if (text.remove("ц")){
-                      var c = b+ 24;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ч') {
-                    if (text.remove("ч")){
-                      var c = b+ 25;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ш') {
-                    if (text.remove("ш")){
-                      var c = b+ 26;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'щ') {
-                    if (text.remove("щ")){
-                      var c = b+ 27;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ъ') {
-                    if (text.remove("ъ")){
-                      var c = b+ 28;
-                      c = c-33 ;
-                      if (c>33){
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ы') {
-                    if (text.remove("ы")){
-                      var c = b+ 29;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ь') {
-                    if (text.remove("ь")){
-                      var c = b+ 30;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'э') {
-                    if (text.remove("э")){
-                      var c = b+ 31;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'ю') {
-                    if (text.remove("ю")){
-                      var c = b+ 32;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-                  else if (text[i] == 'я') {
-                    if (text.remove("я")){
-                      var c = b+ 33;
-                      if (c>33){
-                        c = c-33 ;
-                      }
-                      text.insert(i,'$c'); }
-                  }
-
-                }*/
                 result = text.toString();
               });
             }, child: Text('Зашифровать!'))
-            ,)
+            ,),
+            ] //children for row 1
+          ), // основная кнопочка
+            Column(
+              children: [
+                Padding(padding: EdgeInsets.only(top: 25.0),
+                child : DropdownButton<String>(
+                  value: dropdownValue,
+                  // icon: const Icon(Icons.arrow_downward),
+                  // elevation: 16,
+                  // style: const TextStyle(color: Colors.deepPurple),
+                  // underline: Container(
+                  // height: 2,
+                  // color: Colors.deepPurpleAccent,
+                  // ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownValue = newValue!;
+                    });
+                  },
+                  items: <String>['English','Russian']
+                      .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  )
+                )
+              ],), // кнопка языка
           ],
-        ),
+        ), // кнопочка
         Row(
           children:<Widget>[
             Flexible//
@@ -403,7 +196,7 @@ class _EncryptingState extends State<Encrypting> {
 
            )
           ],
-        ),
+        ), // ряд показывающий результат
         
       ],
     );
@@ -411,24 +204,41 @@ class _EncryptingState extends State<Encrypting> {
         floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.indigo,
         onPressed: (){
-          Clipboard.setData(ClipboardData(text: "$result"));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Текст скопирован!'),
-              duration: const Duration(milliseconds: 1500),
-              width: 140.0, // Width of the SnackBar.
-              padding: const EdgeInsets.symmetric(
+          if (result == " " || result == ''){
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Ничего не скопировано!'),
+                  duration: const Duration(milliseconds: 1500),
+                  width: 140.0, // Width of the SnackBar.
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, // Inner padding for SnackBar content.
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+            );
+          }else {
+                Clipboard.setData(ClipboardData(text: "$result"));
+                ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                content: const Text('Текст скопирован!'),
+                duration: const Duration(milliseconds: 1500),
+                width: 140.0, // Width of the SnackBar.
+                padding: const EdgeInsets.symmetric(
                 horizontal: 8.0, // Inner padding for SnackBar content.
-              ),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
+                ),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-          );
+                ),
+                ),
+                );
+          }
         },
         child: Icon(Icons.copy, color: Colors.grey[400])
-    ),
+    ), // floating button для копирования текста
     );
   }
 }
